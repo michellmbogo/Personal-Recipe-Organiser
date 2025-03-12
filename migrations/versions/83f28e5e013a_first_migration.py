@@ -1,8 +1,8 @@
-"""initial migration
+"""first migration
 
-Revision ID: cf618f3bd39a
+Revision ID: 83f28e5e013a
 Revises: 
-Create Date: 2025-03-10 00:48:08.794684
+Create Date: 2025-03-12 23:43:38.534024
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'cf618f3bd39a'
+revision: str = '83f28e5e013a'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -34,6 +34,8 @@ def upgrade() -> None:
     op.create_table('ingredients',
     sa.Column('ingredient_id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('name', sa.String(), nullable=False),
+    sa.Column('quantity', sa.Float(), nullable=True),
+    sa.Column('unit', sa.String(), nullable=True),
     sa.PrimaryKeyConstraint('ingredient_id')
     )
     op.create_table('recipes',
@@ -55,14 +57,11 @@ def upgrade() -> None:
     sa.PrimaryKeyConstraint('recipe_id', 'category_id')
     )
     op.create_table('recipe_ingredients',
-    sa.Column('recipe_ingredient_id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('recipe_id', sa.Integer(), nullable=False),
     sa.Column('ingredient_id', sa.Integer(), nullable=False),
-    sa.Column('quantity', sa.Float(), nullable=True),
-    sa.Column('unit', sa.String(), nullable=True),
     sa.ForeignKeyConstraint(['ingredient_id'], ['ingredients.ingredient_id'], ),
     sa.ForeignKeyConstraint(['recipe_id'], ['recipes.recipe_id'], ),
-    sa.PrimaryKeyConstraint('recipe_ingredient_id')
+    sa.PrimaryKeyConstraint('recipe_id')
     )
     op.create_table('recipe_nutrition',
     sa.Column('recipe_id', sa.Integer(), nullable=False),
