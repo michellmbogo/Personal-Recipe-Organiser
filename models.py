@@ -5,14 +5,21 @@ from sqlalchemy.orm import relationship,declarative_base
 # Define the base class for declarative models
 Base = declarative_base()
 
-# An association table that links Recipe and category
-recipe_categories_association = Table('recipe_categories', Base.metadata,
-                                      Column('recipe_id',ForeignKey('recipes.recipe_id'),primary_key=True),
-                                      Column('category_id',ForeignKey('categories.category_id'),primary_key=True))
+# An association table that links Recipe and Category with NOT NULL foreign keys
+recipe_categories_association = Table(
+    'recipe_categories', Base.metadata,
+    Column('id', Integer, primary_key=True, autoincrement=True),
+    Column('recipe_id', Integer, ForeignKey('recipes.recipe_id'), nullable=False),  # Foreign key to recipes table, NOT NULL
+    Column('category_id', Integer, ForeignKey('categories.category_id'), nullable=False)  # Foreign key to categories table, NOT NULL
+)
 
-recipe_ingredients_association = Table('recipe_ingredients', Base.metadata,
-                                      Column('recipe_id',ForeignKey('recipes.recipe_id'),primary_key=True),
-                                       Column('ingredient_id',ForeignKey('ingredients.ingredient_id'), nullable=False))
+# Association table that links Recipe and Ingredient with NOT NULL foreign keys
+recipe_ingredients_association = Table(
+    'recipe_ingredients', Base.metadata,
+    Column('id', Integer, primary_key=True, autoincrement=True),
+    Column('recipe_id', Integer, ForeignKey('recipes.recipe_id'), nullable=False),  # Foreign key to recipes table, NOT NULL
+    Column('ingredient_id', Integer, ForeignKey('ingredients.ingredient_id'), nullable=False)  # Foreign key to ingredients table, NOT NULL
+)
 
 class Author(Base):
     __tablename__ = 'authors'
