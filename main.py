@@ -19,34 +19,20 @@ def cli():
     """
     pass
 
-# command to add a new author.
-@click.command()
-@click.option('--name',prompt='Enter author name')
-@click.option('--bio',prompt='Enter author bio')
-def add_author(name,bio):
-    session=Session()
-    author=Author(name=name, bio=bio)
-
-    # for adding a new author to the data base
-    session.add(author) 
-    # for saving author to the data base
-    session.commit()
-    click.echo(f"Author added successfully! ID: {author.name}")
-
-    session.close()
-
 # command to add a new recipe
 @click.command()
 @click.option('--title',prompt='Enter recipe title')
 @click.option('--description',prompt='Enter recipe description')
 @click.option('--cooking_time',prompt='Enter cooking time (in minutes)', type=int, default=0)
 @click.option('--servings',prompt='Enter number of servings', type=int, default=0)
-@click.option('--author_id',prompt='Enter author ID', type=int)
+@click.option('--meal_type',prompt='Enter mealtype')
+@click.option('--cuisine',prompt='Enter Cuisine')
+@click.option('--difficulty',prompt='Enter Preparation Difficulty')
 @click.option('--num_ingredients', prompt='Enter number of ingredients', type=int, default=0)
 @click.option('--num_steps', prompt='Enter number of steps', type=int, default=0)
-def add_recipe(title,description,cooking_time,servings,author_id,num_ingredients, num_steps):
+def add_recipe(title,description,cooking_time,servings,author_id,num_ingredients, num_steps ,meal_type,cuisine,difficulty):
     session=Session()
-    recipe=Recipe(title=title, description=description, cooking_time=cooking_time, servings=servings, author_id=author_id)
+    recipe=Recipe(title=title, description=description, cooking_time=cooking_time, servings=servings, author_id=author_id ,meal_type=meal_type, cuisine=cuisine ,difficulty=difficulty) 
 
     # for adding a new author to the data base
     session.add(recipe) 
@@ -61,7 +47,7 @@ def add_recipe(title,description,cooking_time,servings,author_id,num_ingredients
         
         ingredient = session.query(Ingredient).filter(Ingredient.name == ingredient_name).first()
         if not ingredient:
-            ingredient = Ingredient(name=ingredient_name)
+            ingredient = Ingredient(name=ingredient_name, quantity=quantity, unit=unit)
             session.add(ingredient)
             session.commit()  # Commit to generate an ID for the ingredient
         
@@ -136,29 +122,55 @@ def view_recipe(recipe_id):
     else:
         click.echo("Recipe not found.")
 
-# @click.command()
-# @click.argument('recipe_id', type=int)
-# def delete_recipe(recipe_id):
-#     """Delete a recipe from the database."""
-#     recipe = session.query(Recipe).get(recipe_id)
-#     if recipe:
-#         session.delete(recipe)
-#         session.commit()
-#         click.echo("Recipe deleted successfully!")
-#     else:
-#         click.echo("Recipe not found.")
+# Command to search recipes by a single string across title, cuisine, and meal_type
+@click.command()
+@click.option('--search_string', prompt='Enter search string (title, cuisine, or meal type)')
+def search_recipes(search_string):
+    """Search for recipes by title, cuisine, or meal type using a single string."""
+    session = Session()
+    query = session.query(Recipe)
 
-# @click.group()
-# def cli():
-#     """Personal Recipe Organizer CLI."""
-#     pass
+    # Perform case-insensitive search on title, cuisine, or meal type
+    query = query.filter(
+        (Recipe.title.ilike(f"%{search_string}%")) |
+        (Recipe.cuisine.ilike(f"%{search_string}%")) |
+        (Recipe.meal_type.ilike(f"%{search_string}%"))
+    )
+
+    recipes = query.all()
+
+    # Display search results
+    if recipes:
+        click.echo("Search Results:")
+        for recipe in recipes:
+            click.echo(f"ID: {recipe.recipe_id}, Title: {recipe.title}, Cuisine: {recipe.cuisine}, Meal Type: {recipe.meal_type}")
+    else:
+        click.echo("No recipes found matching your search criteria.")
+
+    session.close()
+
+@click.command()
+@click.argument('recipe_id', type=int)
+def delete_recipe(recipe_id):
+    """Delete a recipe from the database."""
+    session = Session()
+    recipe = session.query(Recipe).get(recipe_id)
+    if recipe:
+        session.delete(recipe)
+        session.commit()
+        click.echo("Recipe deleted successfully!")
+    else:
+        click.echo("Recipe not found.")
+
+
 
 # # Add all commands to the CLI group
 cli.add_command(add_author)
 cli.add_command(add_recipe)
 cli.add_command(list_recipes)
 cli.add_command(view_recipe)
-# cli.add_command(delete_recipe)
+cli.add_command(search_recipes)
+cli.add_command(delete_recipe)
 
 if __name__ == "__main__":
     cli()
