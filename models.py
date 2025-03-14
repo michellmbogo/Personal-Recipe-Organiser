@@ -5,15 +5,6 @@ from sqlalchemy.orm import relationship,declarative_base
 # Define the base class for declarative models
 Base = declarative_base()
 
-# An association table that links Recipe and Category with NOT NULL foreign keys
-recipe_categories_association = Table(
-    'recipe_categories', Base.metadata,
-    # a primary key that enables many to many relationship
-    Column('id', Integer, primary_key=True, autoincrement=True), 
-    Column('recipe_id', Integer, ForeignKey('recipes.recipe_id'), nullable=False),  
-    Column('category_id', Integer, ForeignKey('categories.category_id'), nullable=False)  
-)
-
 # Association table that links Recipe and Ingredient with NOT NULL foreign keys
 recipe_ingredients_association = Table(
     'recipe_ingredients', Base.metadata,
@@ -36,8 +27,7 @@ class Recipe(Base):
 
     # Relationships
     steps = relationship("Step", back_populates="recipe")
-    categories = relationship("Category",
-                              secondary=recipe_categories_association, back_populates="recipes")
+    
     ingredients = relationship("Ingredient",
                               secondary=recipe_ingredients_association, back_populates="recipes")
    
@@ -63,14 +53,7 @@ class Step(Base):
     # one to many relationship with recipe
     recipe = relationship("Recipe", back_populates="steps")
 
-class Category(Base):
-    __tablename__ = 'categories'
-    category_id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String, nullable=False)
 
-    #  many to many relationship with recipe
-    recipes = relationship("Recipe",
-                              secondary=recipe_categories_association, back_populates="categories")
 
 
 

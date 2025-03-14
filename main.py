@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, registry
-from models import Author,Recipe,RecipeNutrition,Ingredient,Step,Category
+from models import Recipe,Ingredient,Step
 import click
 
 registry = registry()
@@ -165,7 +165,7 @@ def delete_recipe(recipe_id):
 
 
 # # Add all commands to the CLI group
-cli.add_command(add_author)
+
 cli.add_command(add_recipe)
 cli.add_command(list_recipes)
 cli.add_command(view_recipe)
