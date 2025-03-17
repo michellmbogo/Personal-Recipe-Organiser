@@ -5,12 +5,12 @@ from sqlalchemy.orm import relationship,declarative_base
 # Define the base class for declarative models
 Base = declarative_base()
 
-# Association table that links Recipe and Ingredient with NOT NULL foreign keys
+# Association table that links Recipe and Ingredient 
 recipe_ingredients_association = Table(
     'recipe_ingredients', Base.metadata,
     Column('id', Integer, primary_key=True, autoincrement=True),
-    Column('recipe_id', Integer, ForeignKey('recipes.recipe_id'), nullable=False),  # Foreign key to recipes table, NOT NULL
-    Column('ingredient_id', Integer, ForeignKey('ingredients.ingredient_id'), nullable=False)  # Foreign key to ingredients table, NOT NULL
+    Column('recipe_id', Integer, ForeignKey('recipes.recipe_id'), nullable=False),  
+    Column('ingredient_id', Integer, ForeignKey('ingredients.ingredient_id'), nullable=False)  
 )
 
 
