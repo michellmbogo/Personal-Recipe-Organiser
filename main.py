@@ -30,13 +30,13 @@ def cli():
 @click.option('--difficulty',prompt='Enter Preparation Difficulty')
 @click.option('--num_ingredients', prompt='Enter number of ingredients', type=int, default=0)
 @click.option('--num_steps', prompt='Enter number of steps', type=int, default=0)
-def add_recipe(title,description,cooking_time,servings,author_id,num_ingredients, num_steps ,meal_type,cuisine,difficulty):
+def add_recipe(title,description,cooking_time,servings,num_ingredients, num_steps ,meal_type,cuisine,difficulty):
     session=Session()
-    recipe=Recipe(title=title, description=description, cooking_time=cooking_time, servings=servings, author_id=author_id ,meal_type=meal_type, cuisine=cuisine ,difficulty=difficulty) 
+    recipe=Recipe(title=title, description=description, cooking_time=cooking_time, servings=servings,meal_type=meal_type, cuisine=cuisine ,difficulty=difficulty) 
 
-    # for adding a new author to the data base
+    # for adding a new recipe to the data base
     session.add(recipe) 
-    # for saving author to the data base
+    # for saving recipe to the data base
     session.commit()
 
   # Add ingredients
@@ -91,13 +91,8 @@ def view_recipe(recipe_id):
         click.echo(f"Description: {recipe.description}")
         click.echo(f"Cooking Time: {recipe.cooking_time} minutes")
         click.echo(f"Servings: {recipe.servings}")
-        click.echo(f"Author:", recipe.author.name if recipe.author else "Unknown")
         
-        if recipe.nutrition:
-            click.echo(f"Nutrition - Calories: {recipe.nutrition.calories}, Fat: {recipe.nutrition.fat}, "
-                       f"Protein: {recipe.nutrition.protein}, Carbs: {recipe.nutrition.carbs}")
-        else:
-            click.echo("No nutrition information.")
+        
         
         if recipe.steps:
             click.echo("Steps:")
@@ -106,19 +101,12 @@ def view_recipe(recipe_id):
         else:
             click.echo("No steps available.")
         
-        if recipe.recipe_ingredients:
+        if recipe.ingredients:
             click.echo("Ingredients:")
-            for ri in recipe.recipe_ingredients:
+            for ri in recipe.ingredients:
                 click.echo(f"  {ri.quantity} {ri.unit} of {ri.ingredient.name}")
         else:
             click.echo("No ingredients added.")
-        
-        if recipe.recipe_categories:
-            click.echo("Categories:")
-            for rc in recipe.recipe_categories:
-                click.echo(f"  {rc.category.name}")
-        else:
-            click.echo("No categories assigned.")
     else:
         click.echo("Recipe not found.")
 
