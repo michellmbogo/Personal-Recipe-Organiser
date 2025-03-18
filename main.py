@@ -104,7 +104,7 @@ def view_recipe(recipe_id):
         if recipe.ingredients:
             click.echo("Ingredients:")
             for ri in recipe.ingredients:
-                click.echo(f"  {ri.quantity} {ri.unit} of {ri.ingredient.name}")
+                click.echo(f"  {ri.quantity} {ri.unit} of {ri.name}")
         else:
             click.echo("No ingredients added.")
     else:
@@ -140,8 +140,19 @@ def search_recipes(search_string):
 @click.command()
 @click.argument('recipe_id', type=int)
 def delete_recipe(recipe_id):
-    """Delete a recipe from the database."""
     session = Session()
+    """Delete recipe steps"""
+    rows_deleted = session.query(Step).filter_by(recipe_id=recipe_id).delete()
+
+        
+    session.commit()
+
+    if rows_deleted > 0:
+        print(f"Successfully deleted {rows_deleted} step(s) for recipe with ID: {recipe_id}")
+    else:
+        print(f"No steps found for recipe with ID: {recipe_id}")
+    
+    """Delete a recipe from the database."""
     recipe = session.query(Recipe).get(recipe_id)
     if recipe:
         session.delete(recipe)
@@ -149,6 +160,48 @@ def delete_recipe(recipe_id):
         click.echo("Recipe deleted successfully!")
     else:
         click.echo("Recipe not found.")
+
+ # updating recipe 
+@click.command()
+@click.argument('recipe_id', type=int)
+@click.option('--title', type=str, help="Update the recipe's title")
+@click.option('--description', type=str, help="Update the recipe's description")
+@click.option('--cooking_time', type=int, help="Update the cooking time")
+@click.option('--servings', type=int, help="Update the number of servings")
+@click.option('--meal_type', type=str, help="Update the meal type")
+@click.option('--cuisine', type=str, help="Update the cuisine")
+@click.option('--difficulty', type=str, help="Update the difficulty")
+def update_recipe(recipe_id, title, description, cooking_time, servings, meal_type, cuisine, difficulty):
+    """Update a recipe's general information."""
+    # Fetch the recipe from the database
+    session = Session()
+
+    recipe = session.query(Recipe).filter_by(recipe_id=recipe_id).first()
+
+    if not recipe:
+        click.echo(f"Recipe with ID {recipe_id} not found.")
+        return
+
+    # Update recipe fields if provided
+    if title:
+        recipe.title = title
+    if description:
+        recipe.description = description
+    if cooking_time is not None:
+        recipe.cooking_time = cooking_time
+    if servings is not None:
+        recipe.servings = servings
+    if meal_type:
+        recipe.meal_type = meal_type
+    if cuisine:
+        recipe.cuisine = cuisine
+    if difficulty:
+        recipe.difficulty = difficulty
+
+    # Commit the changes
+    session.commit()
+    click.echo(f"Recipe with ID {recipe_id} has been updated.")
+
 
 
 
@@ -159,6 +212,7 @@ cli.add_command(list_recipes)
 cli.add_command(view_recipe)
 cli.add_command(search_recipes)
 cli.add_command(delete_recipe)
+cli.add_command(update_recipe)
 
 if __name__ == "__main__":
     cli()

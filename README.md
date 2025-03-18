@@ -14,6 +14,7 @@ The Personal Recipe Organiser is a user-friendly application that helps you mana
 - Categorisation: allows users to sort and group their recipes based on different categories.
 - Search : The Search feature allows users to quickly locate a recipe by entering Title, Cuisine or meal type .
 - Delete: The Delete feature allows users to remove recipes from their collection if the recipe is no longer needed.
+-Updating :  Allows users to update the recipe's title, description, cooking time, servings,mealtype, cuisine and difficulty fields.
 
 ## Installation
 
@@ -65,7 +66,7 @@ Once the program is running, use the following commands to run:
 ~~~
  3. *View Recipe*:
    ~~~bash
-    python3 main.py view-recipe
+    python3 main.py view-recipe ID
 ~~~
  4. *Search Recipe*:
    ~~~bash
@@ -74,39 +75,38 @@ Once the program is running, use the following commands to run:
 
  5. *Delete Recipe*:
    ~~~bash
-    python3 main.py delete-recipe
+    python3 main.py delete-recipe ID
+~~~
+
+ 6. *Update Recipe*:
+   ~~~bash
+    python3 main.py update-recipe ID --field to be updted "new update"
 ~~~
 
  
-## Contributing
+## Contribution
+Contributions are welcome! Please follow this steps
+1. **Fork the repository**
 
-If you’d like to contribute to this project:
-
-- Fork the repository
-- Create a new branch 
+2. **Create a new branch**
    ~~~bash
-    git checkout -b feature-branch
-~~~
-
-
-- Commit your changes
+   git checkout -b feature/yourFeature
+   ~~~
+3. **Commit your Changes**
    ~~~bash
-   git commit -m "Added new feature"
-~~~
-
-- Push to the branch 
-   ~~~bash
-    git push origin feature-branch
-~~~
-
-- Create a Pull Request
-
+   git commit -m "Add a new feature"
+   ~~~
+4. ** push to the branch**
+  ~~~bash
+   git push origin feature/YourFeatue
+   ~~~
+5. **Open a pull request**
 
 ## License
 
-This project is open-source and available under the MIT License.
+Distributed under the MIT license
 
 ## Contact
 
-Name : Michell Mbogo
+Name : Michell mbogo
 Email : michellwambui.m@gmail.com
