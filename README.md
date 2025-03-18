@@ -14,7 +14,7 @@ The Personal Recipe Organiser is a user-friendly application that helps you mana
 - Categorisation: allows users to sort and group their recipes based on different categories.
 - Search : The Search feature allows users to quickly locate a recipe by entering Title, Cuisine or meal type .
 - Delete: The Delete feature allows users to remove recipes from their collection if the recipe is no longer needed.
--Updating :  Allows users to update the recipe's title, description, cooking time, servings,mealtype, cuisine and difficulty fields.
+- Updating : Allows users to update the recipe's title, description, cooking time, servings,mealtype, cuisine and difficulty fields.
 
 ## Installation
 
