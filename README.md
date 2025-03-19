@@ -58,29 +58,35 @@ python lib/cli.py
 Once the program is running, use the following commands to run:
  1. *Add Recipe*:
    ~~~bash
-    python3 main.py add-recipe
+    python main.py add-recipe
 ~~~
  2. *List Recipes*:
    ~~~bash
-    python3 main.py list-recipes
+    python main.py list-recipes
 ~~~
  3. *View Recipe*:
    ~~~bash
-    python3 main.py view-recipe ID
+    python main.py view-recipe ID
+
+    eg. python main.py view-recipe 16
 ~~~
  4. *Search Recipe*:
    ~~~bash
-    python3 main.py search-recipes
+    python main.py search-recipes
 ~~~
 
  5. *Delete Recipe*:
    ~~~bash
-    python3 main.py delete-recipe ID
+    python main.py delete-recipe ID
+
+    eg. python main.py delete-recipe 16
 ~~~
 
  6. *Update Recipe*:
    ~~~bash
-    python3 main.py update-recipe ID --field to be updted "new update"
+    python main.py update-recipe ID --field to be updted "new update"
+
+    eg python main.py update-recipe 16 --description "This a meal that is common among the masaai community in kenya"
 ~~~
 
  
