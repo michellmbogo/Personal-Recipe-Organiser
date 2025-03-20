@@ -164,13 +164,13 @@ def delete_recipe(recipe_id):
  # updating recipe 
 @click.command()
 @click.argument('recipe_id', type=int)
-@click.option('--title', type=str, help="Update the recipe's title")
-@click.option('--description', type=str, help="Update the recipe's description")
-@click.option('--cooking_time', type=int, help="Update the cooking time")
-@click.option('--servings', type=int, help="Update the number of servings")
-@click.option('--meal_type', type=str, help="Update the meal type")
-@click.option('--cuisine', type=str, help="Update the cuisine")
-@click.option('--difficulty', type=str, help="Update the difficulty")
+@click.option('--title', help="Update the recipe's title")
+@click.option('--description',help="Update the recipe's description")
+@click.option('--cooking_time',help="Update the cooking time", type=int)
+@click.option('--servings',help="Update the number of servings",type=int)
+@click.option('--meal_type',help="Update the meal type")
+@click.option('--cuisine', help="Update the cuisine")
+@click.option('--difficulty',help="Update the difficulty")
 def update_recipe(recipe_id, title, description, cooking_time, servings, meal_type, cuisine, difficulty):
     """Update a recipe's general information."""
     # Fetch the recipe from the database
@@ -201,9 +201,186 @@ def update_recipe(recipe_id, title, description, cooking_time, servings, meal_ty
     # Commit the changes
     session.commit()
     click.echo(f"Recipe with ID {recipe_id} has been updated.")
+# CRUD Operations for Ingredient Table
+
+#add Ingredients
+@cli.command()
+@click.option('--name', prompt = 'Enter Ingredient name')
+@click.option('--quantity', prompt = 'Enter Ingredient quantity', type=int)
+@click.option('--unit', prompt = 'Enter Ingredient unit')
 
 
+def add_ingredient(name, quantity, unit):
+    session = Session()
+    ingredient = Ingredient(name=name, quantity=quantity, unit=unit)
 
+    session.add(ingredient)
+    session.commit()
+
+    click.echo("Added Ingredient")
+
+#view Ingredient
+@click.command()
+@click.argument('ingredient_id', type=int)
+def view_ingredient(ingredient_id):
+    """View details of a specific ingredient by its ID."""
+    session = Session()
+    ingredient = session.get(Ingredient,ingredient_id)
+    if ingredient:
+        click.echo(f"Ingredient ID: {ingredient.ingredient_id}")
+        click.echo(f"name: {ingredient.name}")
+        click.echo(f"Quantity: {ingredient.quantity}")
+        click.echo(f"Unit: {ingredient.unit}")
+    else:
+       click.echo ("Ingredient not found") 
+#List Ingredients
+
+@click.command()
+def list_ingredients():
+    """List all ingredients in the database."""
+    session = Session()
+    ingredients = session.query(Ingredient).all()
+    if ingredients:
+        click.echo("Ingredients:")
+        for ingredient in ingredients:
+            click.echo(f"ID: {ingredient.ingredient_id}, name: {ingredient.name}, quantity: {ingredient.quantity}, unit: {ingredient.unit}")
+    else:
+        click.echo("No ingredient found.")
+        
+#Updating Ingredients
+@click.command()
+@click.argument('ingredient_id', type=int)
+@click.option('--name', help="Update the ingredient name")
+@click.option('--unit',help="Update the ingredient unit")
+@click.option('--quantity',help="Update the ingredient quantity", type=int)
+
+def update_ingredient(ingredient_id, name, unit, quantity):
+
+    session = Session()
+
+    ingredient = session.query(Ingredient).filter_by(ingredient_id=ingredient_id).first()
+
+    if not ingredient:
+        click.echo(f"Ingredient with ID {ingredient_id} not found.")
+        return
+
+    # Update recipe fields if provided
+    if name:
+        ingredient.name = name
+    if unit:
+        ingredient.unit = unit
+    if quantity is not None:
+        ingredient.quantity = quantity
+   
+        
+    # Commit the changes
+    session.commit()
+    click.echo(f"Ingredient with ID {ingredient_id} has been updated.")
+
+
+# Deleting Ingredients
+@click.command()
+@click.argument('ingredient_id', type=int)
+def delete_ingredient(ingredient_id):
+    session = Session()
+    
+    """Delete an ingredient from the database."""
+    ingredient = session.query(Ingredient).get(ingredient_id)
+    if ingredient:
+        session.delete(ingredient)
+        session.commit()
+        click.echo("Ingredient deleted successfully!")
+    else:
+        click.echo("Ingredient not found.")
+
+# CRUD for Steps
+
+# Add steps
+@cli.command()
+@click.option('--recipe_id', prompt = 'Enter recipe id')
+@click.option('--step_number', prompt = 'Enter step number', type=int)
+@click.option('--instruction', prompt = 'Enter step instruction')
+
+
+def add_step(recipe_id, step_number, instruction):
+    session = Session()
+    step = Step(recipe_id = recipe_id, step_number=step_number, instruction=instruction)
+
+    session.add(step)
+    session.commit()
+
+    click.echo("Added Step")
+
+#view Step
+@click.command()
+@click.argument('step_id', type=int)
+def view_step(step_id):
+    """View details of a specific step by its ID."""
+    session = Session()
+    step = session.get(Step,step_id)
+    if step:
+        click.echo(f"Step ID: {step.step_id}")
+        click.echo(f"step_number: {step.step_number}")
+        click.echo(f"Instruction: {step.instruction}")
+        click.echo(f"recipe_id: {step.recipe_id}")
+    else:
+       click.echo ("step not found") 
+
+#List Steps
+
+@click.command()
+def list_steps():
+    """List all steps in the database."""
+    session = Session()
+    steps = session.query(Step).all()
+    if steps:
+        click.echo("Steps:")
+        for step in steps:
+            click.echo(f"ID: {step.step_id}, recipe_id: {step.recipe_id}, instruction: {step.instruction}, step_number: {step.step_number}")
+    else:
+        click.echo("No step found.")
+
+#Updating Ingredients
+@click.command()
+@click.argument('step_id', type=int)
+@click.option('--step_number', help="Update the step number")
+@click.option('--instruction',help="Update the step instruction")
+
+
+def update_step(step_id, step_number, instruction, ):
+
+    session = Session()
+
+    step = session.query(Step).filter_by(step_id = step_id).first()
+
+    if not step:
+        click.echo(f"Step with ID {step_id} not found.")
+        return
+
+    # Update recipe fields if provided
+    if step_number:
+        step.step_number = step_number
+    if instruction:
+        step.instruction = instruction
+    
+    # Commit the changes
+    session.commit()
+    click.echo(f"Step with ID {step_id} has been updated.")
+
+# Deleting Ingredients
+@click.command()
+@click.argument('step_id', type=int)
+def delete_step(step_id):
+    session = Session()
+    
+    """Delete a step from the database."""
+    step = session.query(Step).get(step_id)
+    if step:
+        session.delete(step)
+        session.commit()
+        click.echo("Step deleted successfully!")
+    else:
+        click.echo("Step not found.")
 
 # # Add all commands to the CLI group
 
@@ -213,6 +390,16 @@ cli.add_command(view_recipe)
 cli.add_command(search_recipes)
 cli.add_command(delete_recipe)
 cli.add_command(update_recipe)
+cli.add_command(add_ingredient)
+cli.add_command(view_ingredient)
+cli.add_command(list_ingredients)
+cli.add_command(update_ingredient)
+cli.add_command(delete_ingredient)
+cli.add_command(add_step)
+cli.add_command(view_step)
+cli.add_command(list_steps)
+cli.add_command(update_step)
+cli.add_command(delete_step)
 
 if __name__ == "__main__":
     cli()

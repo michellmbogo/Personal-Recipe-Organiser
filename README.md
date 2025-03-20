@@ -32,30 +32,37 @@ The Personal Recipe Organiser is a user-friendly application that helps you mana
 ~~~bash
 git clone git@github.com:michellmbogo/Personal-Recipe-Organiser.git
 ~~~
+2. *Navigate into the directory *:
+~~~bash
+cd Personal-Recipe-Organiser
+~~~
 
-2. *Create a virtual environment and install dependencies* :
+3. *Create a virtual environment and install dependencies* :
 ~~~bash
 python -m venv env
 source env/bin/activate
 ~~~
 
-3. *Install necessary Python packages:*:
+4. *Install necessary Python packages:*:
 ~~~bash
 pipenv install sqlalchemy
 pipenv install click  # For CLI handling
 ~~~
 
-4. *Set up the database*:
+5. *Set up the database*:
 ~~~bash
 python lib/models/init_db.py
 ~~~
-5. *Run the application*:
+6. *Run the application*:
 ~~~bash
 python lib/cli.py
 ~~~
 
 ## Usage
-Once the program is running, use the following commands to run:
+Once the program is running, use the following to run:
+
+## Recipe Commands
+
  1. *Add Recipe*:
    ~~~bash
     python main.py add-recipe
@@ -87,6 +94,68 @@ Once the program is running, use the following commands to run:
     python main.py update-recipe ID --field to be updted "new update"
 
     eg python main.py update-recipe 16 --description "This a meal that is common among the masaai community in kenya"
+~~~
+ 
+ ## Ingredient Commands:
+ 
+1. *Add Ingredient*:
+   ~~~bash
+    python main.py add-ingredient
+~~~
+ 2. *List Ingredients*:
+   ~~~bash
+    python main.py list-ingredients
+~~~
+ 3. *View Ingredient*:
+   ~~~bash
+    python main.py view-ingredient ID
+
+    eg. python main.py view-ingredient 16
+~~~
+ 
+ 5. *Delete Ingredient*:
+   ~~~bash
+    python main.py delete-ingredient ID
+
+    eg. python main.py delete-ingredient 16
+~~~
+
+ 6. *Update Ingredient*:
+   ~~~bash
+    python main.py update-ingredient ID --field to be updted "new update"
+
+    eg python main.py update-ingredient 16 --name "Chicken"
+~~~
+
+ ## Step Commands:
+
+ 1. *Add Step*:
+   ~~~bash
+    python main.py add-step
+~~~
+ 2. *List Steps*:
+   ~~~bash
+    python main.py list-steps
+~~~
+ 3. *View Step*:
+   ~~~bash
+    python main.py view-step ID
+
+    eg. python main.py view-step 16
+~~~
+
+ 5. *Delete Step*:
+   ~~~bash
+    python main.py delete-step ID
+
+    eg. python main.py delete-step 16
+~~~
+
+ 6. *Update Step*:
+   ~~~bash
+    python main.py update-step ID --field to be updted "new update"
+
+    eg python main.py update-recipe 16 --instruction "Add salt to taste"
 ~~~
 
  
